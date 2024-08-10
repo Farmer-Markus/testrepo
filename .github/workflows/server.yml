@@ -53,7 +53,7 @@ jobs:
 
             artifactid=$(curl -s "https://api.github.com/repos/Farmer-Markus/testrepo/actions/runs/10334008188/artifacts" | head -n 9 | tail -n 1 | grep -oE '[0-9]+' | tail -n 1)
 
-            if ( $artifactid != "" )
+            if ( "$artifactid" != "" )
               then
                   cd minecraft
 
