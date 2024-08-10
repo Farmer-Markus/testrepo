@@ -1,3 +1,7 @@
+name: Java ${{ matrix.Java }} sample
+on: [ workflow_dispatch ]
+
+
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -5,8 +9,6 @@ jobs:
       matrix:
         java: [ '21' ]
 
-    name: Java ${{ matrix.Java }} sample
-    on: [ workflow_dispatch ]
     steps:
       - uses: actions/checkout@v4
       - name: Setup java
