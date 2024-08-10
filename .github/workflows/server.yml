@@ -44,7 +44,7 @@ jobs:
         run:
             ./jdk-21.0.4+7/bin/java -jar fabric.jar
 
-      - name: Saving server files
+     # - name: Saving server files
            # run :
             #    rm fabric.jar
             #    rm minecraft_server*
