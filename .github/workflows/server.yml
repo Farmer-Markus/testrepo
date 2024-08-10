@@ -22,7 +22,6 @@ jobs:
             tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz
 
             ls
-exit
 
             wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar
 
