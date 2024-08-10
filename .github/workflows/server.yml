@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '21'
-          distribution: 'openjdk'
+          distribution: 'microsoft'
 
       - name: Run JAR file
         run: |
