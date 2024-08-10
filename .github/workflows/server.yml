@@ -4,6 +4,7 @@ jobs:
     strategy:
       matrix:
         java: [ '21' ]
+
     name: Java ${{ matrix.Java }} sample
     runns-on: [ workflow_dispatch ]
     steps:
