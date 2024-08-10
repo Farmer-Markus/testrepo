@@ -62,6 +62,19 @@ jobs:
                   unzip server-files.zip
 
                   rm server-files.zip
+
+              else
+
+                  cd minecraft
+
+                  echo "[
+  {
+    "uuid": "e19160a6-9f06-4c6e-b7bc-66c9f4121453",
+    "name": "Farmer_Markus",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  }
+]" >> ops.json
                   
             fi
 
