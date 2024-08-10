@@ -45,11 +45,11 @@ jobs:
             ./jdk-21.0.4+7/bin/java -jar fabric.jar
 
       - name: Saving server files
-            run :
-                rm fabric.jar
-                rm minecraft_server*
-                rm -r mods/
-                rm eula.txt
+           # run :
+            #    rm fabric.jar
+            #    rm minecraft_server*
+            #    rm -r mods/
+           #     rm eula.txt
                 
       - uses: actions/upload-artifact@v4
             with:
