@@ -35,6 +35,6 @@ jobs:
 
             mv e4mc_minecraft-5.1.0.jar mods/
 
-            mv fabric-api-0.102.0%2B1.21.jar mods/
+            mv fabric-api-0.102.0+1.21.jar mods/
                        
             ./jdk-21.0.4+7/bin/java -jar fabric.jar
