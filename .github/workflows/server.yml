@@ -53,27 +53,20 @@ jobs:
 
             artifactid=$(curl -s https://api.github.com/repos/Farmer-Markus/testrepo/actions/runs/10334008188/artifacts | head -n 9 | tail -n 1 | grep -oE '[0-9]+' | tail -n 1)
 
-            ls
+            wget https://github.com/Farmer-Markus/testrepo/actions/runs/$runid/artifacts/$artifactid
 
-            if ( "$artifactid" != "" )
-              then
-                  cd minecraft
+            unzip server-files.zip
 
-                  wget https://github.com/Farmer-Markus/testrepo/actions/runs/$runid/artifacts/$artifactid
+            rm server-files.zip
+            
+            cd minecraft
 
-                  unzip server-files.zip
-
-                  rm server-files.zip
-
-              else
-
-                  cd minecraft
-
-                  echo echo '[{"uuid":"e19160a6-9f06-4c6e-b7bc-66c9f4121453", "name":"Farmer_Markus", "level":4, "bypassesPlayerLimit":false}]' >> ops.json
+            echo echo '[{"uuid":"e19160a6-9f06-4c6e-b7bc-66c9f4121453", "name":"Farmer_Markus", "level":4, "bypassesPlayerLimit":false}]' >> ops.json
                   
             fi
 
       - name: Run Server
+        if: always()
         run:
             cd minecraft
             
