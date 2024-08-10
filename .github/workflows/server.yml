@@ -17,17 +17,15 @@ jobs:
 
       - name: Download Java
         run: 
-            unzip
-            
-            exit
-            
             mkdir minecraft
             
             cd minecraft
             
             wget https://aka.ms/download-jdk/microsoft-jdk-21.0.4-linux-x64.tar.gz 
 
-            tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz 
+            tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz
+
+            rm microsoft-jdk-21.0.4-linux-x64.tar.gz
 
       - name: Download Server, Mods...
         run: 
@@ -55,7 +53,13 @@ jobs:
 
             artifactid=$(curl -s "https://api.github.com/repos/Farmer-Markus/testrepo/actions/runs/10334008188/artifacts" | head -n 9 | tail -n 1 | grep -oE '[0-9]+' | tail -n 1)
 
+            cd minecraft
+           
             wget https://github.com/Farmer-Markus/testrepo/actions/runs/$runid/artifacts/$artifactid
+
+            unzip server-files.zip
+
+            rm server-files.zip
             
      
       - name: Run Server
