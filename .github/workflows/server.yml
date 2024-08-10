@@ -18,10 +18,6 @@ jobs:
       - name: Run Server
         run:
 
-            ip address
-
-            exit
-        
             wget https://aka.ms/download-jdk/microsoft-jdk-21.0.4-linux-x64.tar.gz
 
             tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz 
