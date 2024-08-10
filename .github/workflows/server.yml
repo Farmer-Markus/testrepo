@@ -22,6 +22,7 @@ jobs:
             tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz 
 
             wget https://meta.fabricmc.net/v2/versions/loader/1.21/0.15.11/1.0.1/server/jar
+
             mv jar fabric.jar
 
             echo "eula=true" >> eula.txt
