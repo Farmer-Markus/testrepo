@@ -15,6 +15,7 @@ jobs:
           java-version: '21-ea'
           distribution: 'temurin'
 
-      - name: Run JAR file
+      - name: Run Server
         run: |
-          java --version
+          wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar
+          ls
