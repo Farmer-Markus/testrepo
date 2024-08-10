@@ -29,23 +29,23 @@ jobs:
         run: 
             wget https://meta.fabricmc.net/v2/versions/loader/1.21/0.15.11/1.0.1/server/jar 
 
-            mv jar fabric.jar 
+            mv jar minecraft/fabric.jar 
 
-            echo "eula=true" >> eula.txt 
+            echo "eula=true" >> minecraft/eula.txt 
 
             wget https://cdn.modrinth.com/data/qANg5Jrr/versions/JwZn7YZ0/e4mc_minecraft-5.1.0.jar 
             
             wget https://cdn.modrinth.com/data/P7dR8mSH/versions/oGwyXeEI/fabric-api-0.102.0%2B1.21.jar 
 
-            mkdir mods 
+            mkdir minecraft/mods 
 
-            mv e4mc_minecraft-5.1.0.jar mods/ 
+            mv e4mc_minecraft-5.1.0.jar minecraft/mods/ 
             
-            mv fabric-api-0.102.0+1.21.jar mods/
+            mv fabric-api-0.102.0+1.21.jar minecraft/mods/
      
       - name: Run Server
         run:
-            ./jdk-21.0.4+7/bin/java -jar fabric.jar
+            ./minecraft/jdk-21.0.4+7/bin/java -jar minecraft/fabric.jar
 
      # - name: Saving server files
            # run :
@@ -57,4 +57,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
                 name: server-files
-                path: .
+                path: minecraft/
