@@ -23,4 +23,6 @@ jobs:
 
             wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar
 
-                       ./jdk-21.0.4+7/bin/java -jar paper-1.21-129.jar
+            echo "eula=true" >> eula.txt
+                       
+            ./jdk-21.0.4+7/bin/java -jar paper-1.21-129.jar
