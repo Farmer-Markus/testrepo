@@ -9,14 +9,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup OpenJDK 21
-        uses: actions/setup-java@v2
-        with:
-          java-version: '21-ea'
-          distribution: 'temurin'
+      #- name: Setup OpenJDK 21
+       # uses: actions/setup-java@v2
+        #with:
+         # java-version: '21-ea'
+          #distribution: 'temurin'
 
       - name: Run Server
         run:
+            wget https://aka.ms/download-jdk/microsoft-jdk-21.0.4-linux-x64.tar.gz
+
+            tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz
+
+            ls
+exit
+
             wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar
 
             java -jar paper-1.21-129.jar
