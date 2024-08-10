@@ -1,6 +1,6 @@
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    on: ubuntu-20.04
     strategy:
       matrix:
         java: [ '21' ]
