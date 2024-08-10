@@ -31,7 +31,7 @@ jobs:
 
             mv jar minecraft/fabric.jar 
 
-            echo "eula=true" >> minecraft/eula.txt 
+            echo "eula=true" >> ./minecraft/eula.txt 
 
             wget https://cdn.modrinth.com/data/qANg5Jrr/versions/JwZn7YZ0/e4mc_minecraft-5.1.0.jar 
             
