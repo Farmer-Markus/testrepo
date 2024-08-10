@@ -27,25 +27,29 @@ jobs:
 
       - name: Download Server, Mods...
         run: 
+            cd minecraft
+            
             wget https://meta.fabricmc.net/v2/versions/loader/1.21/0.15.11/1.0.1/server/jar 
 
-            mv jar minecraft/fabric.jar 
+            mv jar fabric.jar 
 
-            echo "eula=true" >> ./minecraft/eula.txt 
+            echo "eula=true" >> eula.txt 
 
             wget https://cdn.modrinth.com/data/qANg5Jrr/versions/JwZn7YZ0/e4mc_minecraft-5.1.0.jar 
             
             wget https://cdn.modrinth.com/data/P7dR8mSH/versions/oGwyXeEI/fabric-api-0.102.0%2B1.21.jar 
 
-            mkdir minecraft/mods 
+            mkdir mods 
 
-            mv e4mc_minecraft-5.1.0.jar minecraft/mods/ 
+            mv e4mc_minecraft-5.1.0.jar mods/ 
             
-            mv fabric-api-0.102.0+1.21.jar minecraft/mods/
+            mv fabric-api-0.102.0+1.21.jar mods/
      
       - name: Run Server
         run:
-            ./minecraft/jdk-21.0.4+7/bin/java -jar minecraft/fabric.jar
+            cd minecraft
+            
+            ./jdk-21.0.4+7/bin/java -jar fabric.jar
 
      # - name: Saving server files
            # run :
