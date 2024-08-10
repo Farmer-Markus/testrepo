@@ -17,9 +17,9 @@ jobs:
 
       - name: Download Java
         run: 
-unzip
+            unzip
             
-exit
+            exit
             
             mkdir minecraft
             
