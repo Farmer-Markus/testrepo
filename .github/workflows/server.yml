@@ -62,6 +62,7 @@ jobs:
                   unzip server-files.zip
 
                   rm server-files.zip
+                  
             fi
 
       - name: Run Server
