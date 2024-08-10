@@ -1,0 +1,22 @@
+name: build
+on: #[pull_request, push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      microsoft:
+        java: [ '21' ]
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+      - name: setup jdk
+        uses: actions/setup-java@v1
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+      - name: run
+        run: echo "hello world"
+            java --version
+          
