@@ -68,6 +68,7 @@ jobs:
             echo '[{"uuid":"e19160a6-9f06-4c6e-b7bc-66c9f4121453", "name":"Farmer_Markus", "level":4, "bypassesPlayerLimit":false}]' >> ops.json
 
       - name: Run Server
+        if: always()
         run:
             cd minecraft
             
@@ -81,6 +82,7 @@ jobs:
            #     rm eula.txt
                 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
                 name: server-files
                 path: minecraft/
