@@ -21,8 +21,14 @@ jobs:
 
             tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz 
 
-            wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar
+            wget https://meta.fabricmc.net/v2/versions/loader/1.21/0.15.11/1.0.1/server/jar
 
             echo "eula=true" >> eula.txt
+
+            wget https://cdn.modrinth.com/data/qANg5Jrr/versions/JwZn7YZ0/e4mc_minecraft-5.1.0.jar
+
+            mkdir mods
+
+            mv e4mc_minecraft-5.1.0.jar mods/
                        
-            ./jdk-21.0.4+7/bin/java -jar paper-1.21-129.jar
+            ./jdk-21.0.4+7/bin/java -jar fabric-server-mc.1.21-loader.0.15.11-launcher.1.0.1.jar
