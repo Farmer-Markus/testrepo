@@ -17,8 +17,8 @@ jobs:
 
       - name: Download Java
         run: 
-            mkdir server 
-            cd server 
+            mkdir mc 
+            cd mc 
             
             wget https://aka.ms/download-jdk/microsoft-jdk-21.0.4-linux-x64.tar.gz 
 
