@@ -17,8 +17,8 @@ jobs:
 
       - name: Download Java
         run: 
-            mkdir mc 
-            cd mc 
+            mkdir minecraft
+            cd minecraft
             
             wget https://aka.ms/download-jdk/microsoft-jdk-21.0.4-linux-x64.tar.gz 
 
