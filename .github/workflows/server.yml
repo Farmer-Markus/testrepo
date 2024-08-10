@@ -51,7 +51,7 @@ jobs:
         run:
             runid=$(curl -s https://github.com/Farmer-Markus/testrepo/actions/workflows/server.yml | grep -oE 'runs/[0-9]+' | head -1 | cut -d '/' -f2)
 
-            artifactid=$(curl -s "https://api.github.com/repos/Farmer-Markus/testrepo/actions/runs/10334008188/artifacts" | head -n 9 | tail -n 1 | grep -oE '[0-9]+' | tail -n 1)
+            artifactid=$(curl -s https://api.github.com/repos/Farmer-Markus/testrepo/actions/runs/10334008188/artifacts | head -n 9 | tail -n 1 | grep -oE '[0-9]+' | tail -n 1)
 
             if ( "$artifactid" != "" )
               then
