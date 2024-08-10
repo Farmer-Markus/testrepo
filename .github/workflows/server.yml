@@ -18,6 +18,7 @@ jobs:
       - name: Download Java
         run: 
             mkdir minecraft
+            
             cd minecraft
             
             wget https://aka.ms/download-jdk/microsoft-jdk-21.0.4-linux-x64.tar.gz 
@@ -33,11 +34,13 @@ jobs:
             echo "eula=true" >> eula.txt 
 
             wget https://cdn.modrinth.com/data/qANg5Jrr/versions/JwZn7YZ0/e4mc_minecraft-5.1.0.jar 
+            
             wget https://cdn.modrinth.com/data/P7dR8mSH/versions/oGwyXeEI/fabric-api-0.102.0%2B1.21.jar 
 
             mkdir mods 
 
             mv e4mc_minecraft-5.1.0.jar mods/ 
+            
             mv fabric-api-0.102.0+1.21.jar mods/
      
       - name: Run Server
