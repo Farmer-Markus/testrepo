@@ -19,10 +19,8 @@ jobs:
         run:
             wget https://aka.ms/download-jdk/microsoft-jdk-21.0.4-linux-x64.tar.gz
 
-            tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz
-
-            ls
+            tar -xvzf microsoft-jdk-21.0.4-linux-x64.tar.gz 
 
             wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar
 
-            java -jar paper-1.21-129.jar
+                       ./jdk-21.0.4+7/bin/java -jar paper-1.21-129.jar
