@@ -16,8 +16,9 @@ jobs:
           distribution: 'temurin'
 
       -name: Download Server Software
+        run:
+            wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar
 
       - name: Run Server
-        run: |
-          wget https://api.papermc.io/v2/projects/paper/versions/1.21/builds/129/downloads/paper-1.21-129.jar |
-          java -jar paper-1.21-129.jar
+        run:
+            java -jar paper-1.21-129.jar
