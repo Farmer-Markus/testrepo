@@ -47,17 +47,17 @@ jobs:
             
             mv fabric-api-0.102.0+1.21.jar mods/
 
-      - name: download server data of recent runs
-        run:
-            runid=$(curl -s https://github.com/Farmer-Markus/testrepo/actions/workflows/server.yml | grep -oE 'runs/[0-9]+' | cut -d '/' -f2 | tail -n 48 | head -n 1)
-
-            artifactid=$(curl -s https://api.github.com/repos/Farmer-Markus/testrepo/actions/runs/$runid/artifacts | head -n 9 | tail -n 1 | grep -oE '[0-9]+' | tail -n 1)
-
-            wget https://github.com/Farmer-Markus/testrepo/actions/runs/$runid/artifacts/$artifactid
-
-            unzip server-files.zip
-
-            rm server-files.zip
+     # - name: download server data of recent runs
+      #  run:
+       #     runid=$(curl -s https://github.com/Farmer-Markus/testrepo/actions/workflows/server.yml | grep -oE 'runs/[0-9]+' | cut -d '/' -f2 | tail -n 48 | head -n 1)
+#
+ #           artifactid=$(curl -s https://api.github.com/repos/Farmer-Markus/testrepo/actions/runs/$runid/artifacts | head -n 9 | tail -n 1 | grep -oE '[0-9]+' | tail -n 1)
+#
+ #           wget https://github.com/Farmer-Markus/testrepo/actions/runs/$runid/artifacts/$artifactid
+#
+ #           unzip server-files.zip
+#
+ #           rm server-files.zip
                   
 
       - name: Make me op
@@ -81,8 +81,8 @@ jobs:
             #    rm -r mods/
            #     rm eula.txt
                 
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-                name: server-files
-                path: minecraft/
+      #- uses: actions/upload-artifact@v4
+       # if: always()
+        #with:
+         #       name: server-files
+          #      path: minecraft/
