@@ -1,7 +1,7 @@
 #include <unordered_map>
+#include <iostream>
 
 #include "world.h"
-#include "game.h"
 
 std::unordered_map<std::pair<int, int>, world::groundTile> world::tileMap; //zum speicher reservieren
 std::unordered_map<std::pair<int, int>, world::buildingTile> world::buildingTileMap;
@@ -16,23 +16,27 @@ world::groundTile world::getTile(int x, int y) {
         tile = it->second;  // Das Tile befindet sich im `second` des Paares
         return tile;
     } else {
-        tile.id = std::rand() % 2;
+        if(std::rand() % 2 == 1) {
+            tile.id = "grass-ground";
+        } else {
+            tile.id = "dirt-ground";
+        }
         tileMap[{x, y}] = {tile.id};
         
         return tile;
     }
 }
 
-void world::genTestBuilding() {
+/*void world::genTestBuilding() {
     buildingTile tile;
     tile.id = 1;
     tile.size.h = 28;
     tile.size.w = 28;
     
     buildingTileMap[{0, 0}] = {tile};
-}
+}*/
 
-void world::createBuilding(int x, int y, buildingTile tile) {
+void world::saveBuilding(int x, int y, buildingTile tile) {
     buildingTileMap[{x, y}] = {tile};
 }
 

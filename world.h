@@ -2,8 +2,7 @@
 
 #include <unordered_map>
 #include <utility>
-
-#include "game.h"
+#include <string>
 
 //using coordinate = std::pair<int, int>; // x, y Koordinaten, coordinate.first = x, coordinate.secong = y
 
@@ -25,22 +24,24 @@ class world {
     public:
     
     struct groundTile {
-        int id;
+        std::string id;
     };
 
     struct buildingTile {
-        int id;
+        std::string id = "";
         struct size {
             int w;
             int h;
         } size;
     };
 
-    static std::unordered_map<std::pair<int, int>, world::groundTile> tileMap; //für den compiler
-    static std::unordered_map<std::pair<int, int>, world::buildingTile> buildingTileMap;
     static groundTile getTile(int x, int y);
     static buildingTile getBuildingTile(int x, int y);
 
-    static void genTestBuilding();
-    static void createBuilding(int x, int y, buildingTile tile);
+    /*static void genTestBuilding();*/
+    static void saveBuilding(int x, int y, buildingTile tile);
+
+    protected:
+    static std::unordered_map<std::pair<int, int>, world::groundTile> tileMap; //für den compiler
+    static std::unordered_map<std::pair<int, int>, world::buildingTile> buildingTileMap;
 };

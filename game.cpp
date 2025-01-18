@@ -1,10 +1,12 @@
 #include "game.h"
 #include "world.h"
 #include "texture.h"
+#include "building.h"
 
 #include <iostream>
 //#include <string.h>
 #include <cmath>
+#include <optional>
 
 #ifdef ANDROID
 #include <android/log.h>
@@ -13,47 +15,22 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 
-SDL_Rect rect;
+SDL_FRect rect;
 
 bool game::startGame(SDL_Window* mainWindow) {
-    rect.w = 32;
-    rect.h = 32;
-
     SDL_Renderer* mainRenderer;
     mainRenderer = SDL_GetRenderer(mainWindow);
     SDL_SetRenderDrawBlendMode(mainRenderer, SDL_BLENDMODE_BLEND);
 
-    /*SDL_Surface* surface;
-#ifdef ANDROID
-    surface = SDL_LoadBMP("dirt.bmp");
-#else
-    surface = SDL_LoadBMP("../dirt.bmp");
-#endif
-    texture texture;
-    texture.dirt = SDL_CreateTextureFromSurface(mainRenderer, surface);
-    //SDL_SetTextureColorMod(texture, 255, 255, 255);
-    SDL_FreeSurface(surface);
-
-    if(texture.dirt == NULL)
-        return false;
+    Textures textures;
     
-#ifdef ANDROID
-    surface = SDL_LoadBMP("grass.bmp");
-#else
-    surface = SDL_LoadBMP("../grass.bmp");
-#endif
-    texture.grass = SDL_CreateTextureFromSurface(mainRenderer, surface);
-    SDL_FreeSurface(surface);
-
-    if(texture.grass == NULL)
-        return false;*/
-
-    texture::createTexture("GRASS_TEXTURE", GRASS_TEXTURE_FILE, mainRenderer);
-    if(!texture::createTexture("DIRT_TEXTURE", DIRT_TEXTURE_FILE, mainRenderer))
+    textures.createTexture("grass-ground", mainRenderer);
+    if(!textures.createTexture("dirt-ground", mainRenderer))
         return false;
-    texture::createTexture("WOOD_CHEST_TEXTURE", WOOD_CHEST_TEXTURE_FILE, mainRenderer);
+    textures.createTexture("wooden-chest", mainRenderer);
 
     SDL_Texture* texture;
+    Buildings building;
 
     key key;
     mouse mouse;
@@ -64,18 +41,19 @@ bool game::startGame(SDL_Window* mainWindow) {
     render render;
     world::groundTile tile;
     world::buildingTile buildingTile;
+
+    rect.w = defRec.w;
+    rect.h = defRec.h;
     
     gameRunning = true;
-    world::genTestBuilding();
-
     while(gameRunning) {
         handleFps();
         #ifdef ANDROID
         __android_log_print(3, "org.libsdl.app", "fps: %i", fps);
         #else
-        std::cout << fps << std::endl;
+        //std::cout << fps << std::endl;
         #endif
-        if(!inputHandling(key, plrPos, mouse))
+        if(!inputHandling(key, plrPos, mouse, building))
             gameRunning = false;
 
         SDL_GetWindowSize(mainWindow, &window.w, &window.h);
@@ -83,28 +61,6 @@ bool game::startGame(SDL_Window* mainWindow) {
         SDL_SetRenderDrawColor(mainRenderer, 0, 0, 0, 255);
         SDL_RenderClear(mainRenderer);
         SDL_SetRenderDrawColor(mainRenderer, 0, 0, 255, 255);
-
-        /*
-        for (const auto& [key, tile] : world::tileMap) {
-            coords.x = key.first;
-            coords.y = key.second;
-
-            winCoords = getWindowCoords(coords, plrPos);
-            rect.x = winCoords.x;
-            rect.y = winCoords.y;
-            rect.w = defRec.w * zoomFactor; // Skalierung der Breite basierend auf dem Zoom-Faktor
-            rect.h = defRec.h * zoomFacto    r; // Skalierung der Höhe basierend auf dem Zoom-Faktor
-
-            SDL_RenderCopy(mainRenderer, texture, NULL, &rect);
-        }
-        */
-        /*
-        int test = 0;
-        for(const auto& [key, tile] : world::tileMap) {
-            test++;
-        }
-        __android_log_print(3, "org.libsdl.app", "cashed tiles: %i", test);
-        */
         
         render.w = std::floor((window.w / (defRec.w * zoomFactor)) / 2) + 2; //+2 damit man die tiles nicht am rand verschwinden lässt
         render.h = std::floor((window.h / (defRec.h * zoomFactor)) / 2) + 2;
@@ -121,49 +77,26 @@ bool game::startGame(SDL_Window* mainWindow) {
                 winCoords = getWindowCoords(coords, plrPos);
                 rect.x = winCoords.x;
                 rect.y = winCoords.y;
-                rect.w = std::floor(defRec.w * zoomFactor); // Skalierung der Breite basierend auf dem Zoom-Faktor
-                rect.h = std::floor(defRec.h * zoomFactor); // Skalierung der Höhe basierend auf dem Zoom-Faktor
+                rect.w = defRec.w * zoomFactor + 1; // Skalierung der Breite basierend auf dem Zoom-Faktor. + 1, damit kacheln etwas überlappen und es keine sichtbaren fehler(streifen) zwischen den kacheln gibt
+                rect.h = defRec.h * zoomFactor + 1; // Skalierung der Höhe basierend auf dem Zoom-Faktor.
 
-                if(tile.id == 1)
-                    texture = texture::getTexture("GRASS_TEXTURE");
-                else
-                    texture = texture::getTexture("DIRT_TEXTURE");
-
-                SDL_RenderCopy(mainRenderer, texture, NULL, &rect);
+                texture = textures.getTexture(tile.id);
+                SDL_RenderCopyF(mainRenderer, texture, NULL, &rect);
 
                 buildingTile = world::getBuildingTile(coords.x, coords.y);
-                rect.x = std::floor(winCoords.x + ((defRec.w - buildingTile.size.w) * zoomFactor) / 2);
-                rect.y = std::floor(winCoords.y + ((defRec.h - buildingTile.size.h) * zoomFactor) / 2);
-                rect.w = std::floor(buildingTile.size.w * zoomFactor);
-                rect.h = std::floor(buildingTile.size.h * zoomFactor);
-                if(buildingTile.id == 1) {
-                    texture = texture::getTexture("WOOD_CHEST_TEXTURE");
-                    SDL_RenderCopy(mainRenderer, texture, NULL, &rect);
+                if(buildingTile.id != "") {
+                    rect.x = winCoords.x + ((defRec.w - buildingTile.size.w) * zoomFactor) / 2;
+                    rect.y = winCoords.y + ((defRec.h - buildingTile.size.h) * zoomFactor) / 2;
+                    rect.w = buildingTile.size.w * zoomFactor;
+                    rect.h = buildingTile.size.h * zoomFactor;
+
+                    texture = textures.getTexture(buildingTile.id);
+                    SDL_RenderCopyF(mainRenderer, texture, NULL, &rect);
                 }
                 
                 
             }
         }
-
-        
-        
-        
-
-
-
-
-
-
-       /* coords.x = 0;
-        coords.y = 0;
-
-        winCoords = getWindowCoords(coords, plrPos);
-        rect.x = winCoords.x;
-        rect.y = winCoords.y;
-        rect.w = 64 * zoomFactor; // Skalierung der Breite basierend auf dem Zoom-Faktor
-        rect.h = 64 * zoomFactor; // Skalierung der Höhe basierend auf dem Zoom-Faktor
-
-        SDL_RenderCopy(mainRenderer, texture, NULL, &rect);*/
         
         rect.w = std::floor(defRec.w * zoomFactor);
         rect.h = std::floor(defRec.h * zoomFactor);
@@ -179,10 +112,9 @@ bool game::startGame(SDL_Window* mainWindow) {
 
         rect.x = winCoords.x;
         rect.y = winCoords.y;
-        rect.w = std::floor(defRec.w * zoomFactor);
-        rect.h = std::floor(defRec.h * zoomFactor);
 
-        SDL_RenderDrawRect(mainRenderer, &rect);
+        SDL_RenderDrawRectF(mainRenderer, &rect);
+
 
         SDL_RenderPresent(mainRenderer);
     }
@@ -191,12 +123,6 @@ bool game::startGame(SDL_Window* mainWindow) {
         return false;
 
     return true;
-}
-
-//fixed "ingame" pos!
-game::mouse game::getFixedMouseCoords(mouse mouseCoords) {
-    mouse fixedMouse;
-    return fixedMouse;
 }
 
 game::windowCoords game::getWindowCoords(ingameCoords& gameCoords, playerPos& plrPos) {
@@ -224,7 +150,7 @@ int game::handleFps() {
     return fps;
 }
 
-bool game::inputHandling(key& key, playerPos& plrPos, mouse& mouse) {
+bool game::inputHandling(key& key, playerPos& plrPos, mouse& mouse, Buildings& building) {
     SDL_Event inputEvent;
 #ifdef ANDROID
     SDL_TouchID touchDevice = SDL_GetTouchDevice(1);
@@ -332,7 +258,12 @@ bool game::inputHandling(key& key, playerPos& plrPos, mouse& mouse) {
             case SDL_MOUSEBUTTONDOWN:
                 if(inputEvent.button.button == SDL_BUTTON_LEFT) {
                     std::cout << "MouseLeftButtonDown" << std::endl;
-                    world::buildingTile blding;
+                    
+                    windowCoords winCoords = {mouse.x, mouse.y};
+                    ingameCoords coords = getIngameCoords(winCoords, plrPos);
+                    building.newBuilding("wooden-chest", coords);
+                    
+                    /*world::buildingTile blding;
                     ingameCoords coords;
                     windowCoords winCoords;
                     blding.id = 1;
@@ -341,7 +272,7 @@ bool game::inputHandling(key& key, playerPos& plrPos, mouse& mouse) {
                     winCoords.x = mouse.x;
                     winCoords.y = mouse.y;
                     coords = getIngameCoords(winCoords, plrPos);
-                    world::createBuilding(std::floor(coords.x), std::floor(coords.y), blding);
+                    world::createBuilding(std::floor(coords.x), std::floor(coords.y), blding);*/
                 } else if(inputEvent.button.button == SDL_BUTTON_RIGHT) {
                     std::cout << "MouseRightButtonDown" << std::endl;
                 } else if(inputEvent.button.button == SDL_BUTTON_MIDDLE) {

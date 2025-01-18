@@ -1,3 +1,5 @@
+#pragma once
+
 #include <SDL2/SDL.h>
 #include <string>
 #include <unordered_map>
@@ -5,14 +7,17 @@
 #include "textureDefines.h"
 
 
-class texture {
+class Textures {
     private:
+    std::unordered_map<std::string, SDL_Texture*> textures;
 
     protected:
 
     public:
-    static std::unordered_map<std::string, SDL_Texture*> textures;
+    Textures();
+    ~Textures();
+    
 
-    static bool createTexture(const std::string& textureId, const std::string& texturePath, SDL_Renderer* renderer);
-    static SDL_Texture* getTexture(const std::string& textureId);
+    bool createTexture(const std::string textureId, SDL_Renderer* renderer);
+    SDL_Texture* getTexture(const std::string& textureId);
 };

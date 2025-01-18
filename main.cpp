@@ -2,6 +2,7 @@
 
 #include "main.h"
 #include "game.h"
+#include "building.h"
 
 //Including SDL libraries
 #include <SDL2/SDL.h>
@@ -13,6 +14,7 @@
 //\param h window height
 bool windowInit(int w, int h);
 void destroyWindow(SDL_Window* window);
+void createBuildingRegister();
 
 SDL_Window* mainWindow;
 SDL_Renderer* mainRenderer;
@@ -25,6 +27,8 @@ int main(int, char**){
         return 0;
     }
 
+    createBuildingRegister();
+    
     game game;
 
     if(!game.startGame(mainWindow))
@@ -49,7 +53,7 @@ bool windowInit(int w, int h) {
 
     SDL_SetWindowMinimumSize(mainWindow, 400, 300);
 
-    mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED);
+    mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
     if(mainRenderer == NULL) {
         return false;
     }
@@ -62,4 +66,9 @@ void destroyWindow(SDL_Window* window) {
     SDL_DestroyWindow(window);
 }
 
+void createBuildingRegister() {
+    Buildings building;
 
+    building.addBuildingToRegister("wooden-chest", 28, 28);
+    building.addBuildingToRegister("iron-chest", 28, 28);
+}

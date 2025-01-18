@@ -21,10 +21,10 @@ include_directories(${SDL2_INCLUDE_DIRS})
 
 if(ANDROID)
     add_library(main SHARED)
-    target_sources(main PUBLIC main.cpp game.cpp world.cpp texture.cpp)
+    target_sources(main PUBLIC main.cpp game.cpp world.cpp texture.cpp building.cpp)
     target_link_libraries(main SDL2 log) # SDL2_image GLESv2)
 else()
-    add_executable(SDL-Game main.cpp game.cpp world.cpp texture.cpp)
+    add_executable(SDL-Game main.cpp game.cpp world.cpp texture.cpp building.cpp)
     target_link_libraries(SDL-Game ${SDL2_LIBRARIES}) #${SDL2IMAGE_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL2TTF_LIBRARIES})
 endif()
 
