@@ -3,9 +3,19 @@
 
 #include "texture.h"
 
-std::unordered_map<std::string, SDL_Texture*> texture::textures;
 
-bool texture::createTexture(const std::string& textureId, const std::string& texturePath, SDL_Renderer* renderer) {
+
+Textures::Textures() {
+    std::unordered_map<std::string, SDL_Texture*> textures;
+}
+
+Textures::~Textures() {
+    textures.clear();
+}
+
+bool Textures::createTexture(const std::string textureId, SDL_Renderer* renderer) {
+        std::string texturePath;
+        texturePath = TEXTURE_PATH + textureId + ".bmp";
         SDL_Surface* surface;
         SDL_Texture * texture;
         surface = SDL_LoadBMP(texturePath.c_str());
@@ -20,6 +30,6 @@ bool texture::createTexture(const std::string& textureId, const std::string& tex
         return true;
     }
 
-    SDL_Texture* texture::getTexture(const std::string& textureId) {
+SDL_Texture* Textures::getTexture(const std::string& textureId) {
         return textures[textureId];
     }

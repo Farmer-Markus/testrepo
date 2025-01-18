@@ -4,6 +4,8 @@
 #include <SDL2/SDL_thread.h>
 
 #include "world.h"
+//#include "building.h"
+class Buildings;
 
 
 class game {
@@ -11,6 +13,21 @@ class game {
     struct playerPos {
         float x = 0;
         float y = 0;
+    };
+
+    struct ingameCoords {
+        float x = 0;
+        float y = 0;
+    };
+
+    struct windowCoords {
+        int x = 0;
+        int y = 0;
+    };
+
+    struct mouse {
+        int x = 0;
+        int y = 0;
     };
 
     bool gameRunning;
@@ -44,21 +61,6 @@ class game {
             int h;
         } window;
 
-        struct ingameCoords {
-            float x = 0;
-            float y = 0;
-        };
-
-        struct windowCoords {
-            int x = 0;
-            int y = 0;
-        };
-
-        struct mouse {
-            int x = 0;
-            int y = 0;
-        };
-
         struct defaultRec {
             int x = 0;
             int y = 0;
@@ -72,13 +74,10 @@ class game {
         };
 
         int handleFps();
-        bool inputHandling(key& key, playerPos& plrPos, mouse& mouse);
-        windowCoords getWindowCoords(ingameCoords& gameCoords, playerPos& plrPos);
-        ingameCoords getIngameCoords(windowCoords& winCoords, playerPos& plrPos);
-        mouse getFixedMouseCoords(mouse mouseCoords);
+        bool inputHandling(key& key, playerPos& plrPos, mouse& mouse, Buildings& building);
     protected:
+
+    public:
+    windowCoords getWindowCoords(ingameCoords& gameCoords, playerPos& plrPos);
+    ingameCoords getIngameCoords(windowCoords& winCoords, playerPos& plrPos);
 };
-/*
-rect.w = std::floor(defRec.w * zoomFactor); // Skalierung der Breite basierend auf dem Zoom-Faktor
-rect.h = std::floor(defRec.h * zoomFactor);
-*/
