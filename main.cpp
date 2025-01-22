@@ -42,7 +42,7 @@ int main(int, char**){
 }
 
 bool windowInit(int w, int h) {
-    if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
+    if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         return false;
     }
     
@@ -53,7 +53,7 @@ bool windowInit(int w, int h) {
 
     SDL_SetWindowMinimumSize(mainWindow, 400, 300);
 
-    mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
+    mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_ACCELERATED);
     if(mainRenderer == NULL) {
         return false;
     }
