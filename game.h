@@ -1,4 +1,6 @@
 #pragma once
+//chunkSize
+#include "defines.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
@@ -50,6 +52,7 @@ class game {
         bool isMultigesture = false;
         bool fingerUp = true;
         SDL_semaphore* semaphore = SDL_CreateSemaphore(0);
+        std::vector<world::chunk> chunkCache;
         
 
         struct thread {
