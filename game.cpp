@@ -22,9 +22,9 @@
 }*/
 
 
-SDL_FRect gndRect; //for ground
-SDL_FRect bldingRect; //for buildings
-SDL_FRect mrsRect; //for Mouse cursor
+SDL_FRect gndRect; //ground rectangle
+SDL_FRect bldingRect; //building rectangle
+SDL_FRect mrsRect; //mouse cursor rectangle
 
 bool game::startGame(SDL_Window* mainWindow) {
     SDL_Renderer* mainRenderer;
@@ -63,6 +63,9 @@ bool game::startGame(SDL_Window* mainWindow) {
     gndRect.w = defRec.w;
     gndRect.h = defRec.h;
     bool isBuilding = false;
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+
+    //gndTexture = texture.getTexture("grass-ground"); //Performance Problem
     
     gameRunning = true;
     while(gameRunning) {
@@ -81,62 +84,41 @@ bool game::startGame(SDL_Window* mainWindow) {
         SDL_SetRenderDrawColor(mainRenderer, 0, 0, 0, 255);
         SDL_RenderClear(mainRenderer);
         SDL_SetRenderDrawColor(mainRenderer, 0, 0, 255, 255);
-        
-        renderSize.w = std::floor((window.w / (defRec.w * zoomFactor)) / 2 + 2) + 16; //+2 damit man die tiles nicht am rand verschwinden sieht
-        renderSize.h = std::floor((window.h / (defRec.h * zoomFactor)) / 2 + 2) + 16;
-
         SDL_SetRenderTarget(mainRenderer, textureTest);
         
-        /*for(int i = -renderSize.w; i <= renderSize.w; i++) {
-            for(int f = -renderSize.h; f <= renderSize.h; f++) {*/
-                //coords = {-2,16};
-                
-        for(int i = -renderSize.w; i < renderSize.w; i += 16) {
-            for(int f = -renderSize.h; f < renderSize.h; f += 16) {
+        int visibleChunksX = std::ceil(window.w / (defRec.w * cSize * zoomFactor)) + 2; //um chunks nicht am rand auftauchen zu sehen
+        int visibleChunksY = std::ceil(window.h / (defRec.h * cSize * zoomFactor)) + 2;
+        //std::cout << visibleChunksX << " : " << visibleChunksY << std::endl;
 
-                coords.x = i + std::floor(plrPos.x);
-                coords.y = f + std::floor(plrPos.y);
-                cCoords = getIngameChunkCoords(coords);
-                chunk = world::getChunk(cCoords.x, cCoords.y);
+        // Berechne die Start- und Endkoordinaten der sichtbaren Chunks//
+        int startX = std::floor(plrPos.x / cSize) - visibleChunksX / 2;  //
+        int endX = std::ceil(plrPos.x / cSize) + visibleChunksX / 2;       // by github copilot... thx :D
+        int startY = std::floor(plrPos.y / cSize) - visibleChunksY / 2;  //
+        int endY = std::ceil(plrPos.y / cSize) + visibleChunksY / 2;   //
+
+        //Performance Vergleiche: beides = 85% | ohne texture = 71% | ohne chunk saving = 85% | ohne alles = 49%
+
+        for (int chunkX = startX; chunkX <= endX; chunkX++) {
+            for (int chunkY = startY; chunkY <= endY; chunkY++) {
+                chunk = world::getChunk(chunkX, chunkY); //Performance Problem
                 gndRect.w = std::floor(defRec.w * zoomFactor);
                 gndRect.h = std::floor(defRec.h * zoomFactor);
-                for(int cTileX = 0; cTileX < 16; cTileX++) {
-                    for(int cTileY = 0; cTileY < 16; cTileY++) {
-                        coords.x = (cCoords.x * 16) + cTileX - std::floor(plrPos.x);
-                        coords.y = (cCoords.y * 16) + cTileY - std::floor(plrPos.y);
+
+                for (int cTileX = 0; cTileX < cSize; cTileX++) {
+                    for (int cTileY = 0; cTileY < cSize; cTileY++) {
+                        coords.x = (chunkX * cSize) + cTileX;
+                        coords.y = (chunkY * cSize) + cTileY;
 
                         winCoords = getWindowCoords(coords, plrPos, gndRect);
                         gndRect.x = winCoords.x;
                         gndRect.y = winCoords.y;
 
-                        gndTexture = texture.getTexture(chunk.tiles[cTileX][cTileY]); //chunk.tiles[i][f]
+                        gndTexture = texture.getTexture(chunk.tiles[cTileX][cTileY]); //Performance Problem
                         SDL_RenderCopyF(mainRenderer, gndTexture, NULL, &gndRect);
                     }
                 }
-
-
             }
         }
-            /*...................................
-            ...................................
-            ...................................
-            ...................................
-            ...................................
-            ...................................
-            ...................................
-            ...................................
-            ...................................*/
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
                 
                 /*coords.x = i + std::floor(plrPos.x);
                 coords.y = f + std::floor(plrPos.y);
@@ -206,7 +188,6 @@ bool game::startGame(SDL_Window* mainWindow) {
         winCoords.y = mouse.y;
         coords = getIngameCoords(winCoords, plrPos, mrsRect);
 
-        // Runde auf ganze Zahlen, um die Tile-Position zu bestimmen
         coords.x = std::floor(coords.x);
         coords.y = std::floor(coords.y);
 
@@ -256,8 +237,8 @@ bool game::startGame(SDL_Window* mainWindow) {
 
 game::ingameChunkCoords game::getIngameChunkCoords(ingameCoords& coords) {
     ingameChunkCoords cCoords;
-    cCoords.x = static_cast<int>(coords.x / 16);
-    cCoords.y = static_cast<int>(coords.y / 16);
+    cCoords.x = static_cast<int>(coords.x / cSize);
+    cCoords.y = static_cast<int>(coords.y / cSize);
     return cCoords;
 }
 

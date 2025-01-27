@@ -19,8 +19,8 @@ world::chunk world::getChunk(int chunkX, int chunkY) {
         chunk = it->second;
         return chunk;
     } else {
-        for (int y = 0; y < 16; y++) {
-            for (int x = 0; x < 16; x++) {
+        for (int y = 0; y < cSize; y++) {
+            for (int x = 0; x < cSize; x++) {
                 if(std::rand() % 2 == 1) {
                     chunk.tiles[y][x] = "grass-ground";
                 } else {

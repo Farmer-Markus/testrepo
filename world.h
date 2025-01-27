@@ -1,4 +1,5 @@
 #pragma once
+#include "defines.h"
 
 #include <unordered_map>
 #include <utility>
@@ -7,13 +8,12 @@
 
 //using coordinate = std::pair<int, int>; // x, y Koordinaten, coordinate.first = x, coordinate.secong = y
 
-namespace std {//echt keine ahnung wie das hier funktioniert aber wird schon richtig sein -_-
+namespace std {
     template <>
     struct hash<std::pair<int, int>> {
         std::size_t operator()(const std::pair<int, int>& pair) const {
-            auto hash1 = std::hash<int>{}(pair.first);
-            auto hash2 = std::hash<int>{}(pair.second);
-            return hash1 ^ (hash2 << 1); // Kombinieren der Hash-Werte
+            // Kombinieren der Hash-Werte mit einer besseren Methode
+            return std::hash<int>{}(pair.first) ^ (std::hash<int>{}(pair.second) << 1);
         }
     };
 }
@@ -26,7 +26,7 @@ class world {
     struct chunk {
         //int size = 16;
         std::vector<std::vector<std::string>> tiles;
-        chunk() : tiles(16, std::vector<std::string>(16, "empty")) {}    
+        chunk() : tiles(cSize, std::vector<std::string>(cSize, "empty")) {}    
     };
     
     struct groundTile {
