@@ -1,0 +1,16 @@
+[Unit]
+Description=Start/Stop Gameservers
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+WorkingDirectory=/home/server/GameServers
+
+ExecStart=/home/server/GameServers/LaunchServers.sh
+ExecStop=/home/server/GameServers/StopServers.sh
+
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target
